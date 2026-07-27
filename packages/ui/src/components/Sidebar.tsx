@@ -15,6 +15,7 @@ import {
 	useSensor,
 	useSensors,
 } from "@dnd-kit/core";
+import { getCommand } from "@hubble.md/editor";
 import { keymatch } from "keymatch";
 import {
 	type CSSProperties,
@@ -48,7 +49,7 @@ import {
 	splitFileName,
 } from "../lib/filePath";
 import { shouldShowFooterDivider } from "../lib/scrollOverflow";
-import { formatShortcut } from "../lib/shortcut";
+import { formatCommandShortcut } from "../lib/shortcut";
 import { cn } from "../lib/utils";
 import { Button } from "../primitives/button";
 import { useSidebarKeyboardNav } from "./useSidebarKeyboardNav";
@@ -622,7 +623,7 @@ export function Sidebar({
 	const handleTreeKeyDown = (event: React.KeyboardEvent) => {
 		if (
 			!isEditableEventTarget(event.target) &&
-			keymatch(event.nativeEvent, "CmdOrCtrl+Backspace")
+			keymatch(event.nativeEvent, getCommand("app.delete").defaultBinding)
 		) {
 			const focusedRow = focusedIndex === null ? null : rows[focusedIndex];
 			const focusedKey = focusedRow ? sidebarRowKey(focusedRow) : null;
@@ -1794,7 +1795,7 @@ function NewFileMenu({
 						<ActionItem
 							icon={<MingcuteEditLine />}
 							onClick={onCreateFile}
-							shortcut={formatShortcut("CmdOrCtrl+N")}
+							shortcut={formatCommandShortcut("app.new-file")}
 						>
 							New Note
 						</ActionItem>
@@ -1868,7 +1869,7 @@ function FolderActionsMenu({
 				<ActionItem
 					icon={<MingcuteFolderOpenLine />}
 					onClick={() => onRevealFolder(id)}
-					shortcut={formatShortcut("CmdOrCtrl+Alt+R")}
+					shortcut={formatCommandShortcut("app.reveal")}
 				>
 					{revealLabel ?? "Reveal in File Manager"}
 				</ActionItem>
@@ -1877,7 +1878,7 @@ function FolderActionsMenu({
 				<ActionItem
 					icon={<MingcuteEditLine />}
 					onClick={() => onCreateFile(id)}
-					shortcut={formatShortcut("CmdOrCtrl+N")}
+					shortcut={formatCommandShortcut("app.new-file")}
 				>
 					New file
 				</ActionItem>
@@ -1910,7 +1911,7 @@ function FolderActionsMenu({
 				<ActionItem
 					destructive
 					icon={<MingcuteDeleteLine />}
-					shortcut={formatShortcut("CmdOrCtrl+Backspace")}
+					shortcut={formatCommandShortcut("app.delete")}
 					onClick={() => {
 						if (!window.confirm(`Delete ${label} and all its contents?`))
 							return;
@@ -1985,7 +1986,7 @@ function FileActionsMenu({
 				<ActionItem
 					icon={<MingcuteFolderOpenLine />}
 					onClick={() => onRevealFile(file.path)}
-					shortcut={formatShortcut("CmdOrCtrl+Alt+R")}
+					shortcut={formatCommandShortcut("app.reveal")}
 				>
 					{revealLabel ?? "Reveal in File Manager"}
 				</ActionItem>
@@ -1994,7 +1995,7 @@ function FileActionsMenu({
 				<ActionItem
 					icon={<MingcuteCopy2Line />}
 					onClick={() => onCopyFilePath(file.path)}
-					shortcut={formatShortcut("CmdOrCtrl+Shift+C")}
+					shortcut={formatCommandShortcut("app.copy-path")}
 				>
 					Copy file path
 				</ActionItem>
@@ -2019,7 +2020,7 @@ function FileActionsMenu({
 				<ActionItem
 					destructive
 					icon={<MingcuteDeleteLine />}
-					shortcut={formatShortcut("CmdOrCtrl+Backspace")}
+					shortcut={formatCommandShortcut("app.delete")}
 					onClick={() => {
 						if (!window.confirm(`Delete ${label}?`)) return;
 						onDeleteFile(file.path);
@@ -2079,7 +2080,7 @@ function BulkDeleteAction({
 		<ActionItem
 			destructive
 			icon={<MingcuteDeleteLine />}
-			shortcut={formatShortcut("CmdOrCtrl+Backspace")}
+			shortcut={formatCommandShortcut("app.delete")}
 			onClick={() => {
 				if (
 					!window.confirm(
